@@ -219,8 +219,8 @@ char x##_Hashmap_Impl_Full( x##_Hashmap* h); \
 char x##_Hashmap_Has( x##_Hashmap* h, uint64_t key); \
 x x##_Hashmap_Get( x##_Hashmap* h, uint64_t key, x defaultValue ); \
 x * x##_Hashmap_GetPtr( x##_Hashmap* h, uint64_t key, x * defaultValue ); \
-void x##_Hashmap_Set( x##_Hashmap* h, uint64_t key, x value ); \
-void x##_Hashmap_SetPtr( x##_Hashmap* h, uint64_t key, x* value ); \
+size_t x##_Hashmap_Set( x##_Hashmap* h, uint64_t key, x value ); \
+size_t x##_Hashmap_SetPtr( x##_Hashmap* h, uint64_t key, x* value ); \
 void x##_Hashmap_Remove( x##_Hashmap* h, uint64_t key ); \
 void x##_Hashmap_Reserve( x##_Hashmap* h, size_t capacity ); \
 void x##_Hashmap_Clear( x##_Hashmap* h ); \
@@ -402,7 +402,7 @@ inline x * x##_Hashmap_GetPtr( x##_Hashmap* h, uint64_t key, x * defaultValue ) 
         return defaultValue; \
     return &h->data.data[index].value; \
 } \
-inline void x##_Hashmap_Set( x##_Hashmap* h, uint64_t key, x value ) \
+inline size_t x##_Hashmap_Set( x##_Hashmap* h, uint64_t key, x value ) \
 { \
     if (h->hashes.length == 0) \
         x##_Hashmap_Impl_Grow(h); \
@@ -411,8 +411,9 @@ inline void x##_Hashmap_Set( x##_Hashmap* h, uint64_t key, x value ) \
     h->data.data[index].value = value; \
     if (x##_Hashmap_Impl_Full(h)) \
         x##_Hashmap_Impl_Grow(h); \
+	return index; \
 } \
-inline void x##_Hashmap_SetPtr( x##_Hashmap* h, uint64_t key, x* value ) \
+inline size_t x##_Hashmap_SetPtr( x##_Hashmap* h, uint64_t key, x* value ) \
 { \
     if (h->hashes.length == 0) \
         x##_Hashmap_Impl_Grow(h); \
@@ -421,6 +422,7 @@ inline void x##_Hashmap_SetPtr( x##_Hashmap* h, uint64_t key, x* value ) \
     h->data.data[index].value = *value; \
     if (x##_Hashmap_Impl_Full(h)) \
         x##_Hashmap_Impl_Grow(h); \
+	return index; \
 } \
 inline void x##_Hashmap_Remove( x##_Hashmap* h, uint64_t key ) \
 { \
@@ -648,11 +650,11 @@ inline uint64_t ContainmentHash(const void* key, int32_t len)
 }
 inline uint64_t ContainmentHashStringCustomSeed(const char* key, uint64_t seed)
 {
-	return ContainmentHashCustomSeed(key, strlen(key), seed);
+	return ContainmentHashCustomSeed(key, (int32_t) strlen(key), seed);
 }
 inline uint64_t ContainmentHashString(const char* key)
 {
-	return ContainmentHash(key, strlen(key));
+	return ContainmentHash(key, (int32_t) strlen(key));
 }
 
 #ifndef CONTAINMENT_DISABLE_SORTHAND
