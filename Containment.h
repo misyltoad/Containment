@@ -48,6 +48,7 @@ typedef struct \
 } x##_Array ; \
 \
 x##_Array x##_Array_Create(); \
+void x##_Array_Free( x##_Array* a ); \
 x x##_Array_Get( x##_Array* a, size_t index); \
 x* x##_Array_GetPtr( x##_Array* a, size_t index); \
 void x##_Array_Set( x##_Array* a, size_t index, x value ); \
@@ -73,6 +74,10 @@ inline x##_Array x##_Array_Create() \
     a.capacity = 0; \
     a.data = NULL; \
     return a; \
+} \
+inline void x##_Array_Free( x##_Array* a ) \
+{ \
+	free(a->data); \
 } \
 inline x x##_Array_Get( x##_Array* a, size_t index) \
 { \
@@ -199,6 +204,7 @@ typedef struct \
 } x##_Hashmap; \
 \
 x##_Hashmap x##_Hashmap_Create(); \
+void x##_Hashmap_Free( x##_Hashmap* h); \
 size_t x##_Hashmap_Impl_AddEntry( x##_Hashmap* h, uint64_t key); \
 void x##_Hashmap_Impl_Erase( x##_Hashmap* h, FindResult* fr); \
 FindResult x##_Hashmap_Impl_FindByKey( x##_Hashmap* h, uint64_t key); \
@@ -234,6 +240,11 @@ inline x##_Hashmap x##_Hashmap_Create() \
     hashmap.hashes = size_t_Array_Create(); \
     hashmap.data = x##_Hashmap_Entry_Array_Create(); \
 	return hashmap; \
+} \
+inline void x##_Hashmap_Free( x##_Hashmap* h ) \
+{ \
+	size_t_Array_Free(&h->hashes); \
+	x##_Hashmap_Entry_Array_Free(&h->data); \
 } \
 inline size_t x##_Hashmap_Impl_AddEntry( x##_Hashmap* h, uint64_t key) \
 { \
