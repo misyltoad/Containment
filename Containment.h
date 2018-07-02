@@ -47,7 +47,7 @@ typedef struct \
     x * data; \
 } x##_Array ; \
 \
-x##_Array x##_Array_Create(); \
+x##_Array x##_Array_Create(void); \
 void x##_Array_Free( x##_Array* a ); \
 x x##_Array_Get( x##_Array* a, size_t index); \
 x* x##_Array_GetPtr( x##_Array* a, size_t index); \
@@ -67,7 +67,7 @@ void x##_Array_SetCapacity( x##_Array* a, size_t capacity ); \
 void x##_Array_Reserve( x##_Array* a, size_t capacity); \
 void x##_Array_Grow( x##_Array* a, size_t minCapacity); \
 \
-inline x##_Array x##_Array_Create() \
+inline x##_Array x##_Array_Create(void) \
 { \
     x##_Array a; \
     a.length = 0; \
@@ -203,7 +203,7 @@ typedef struct \
     x##_Hashmap_Entry_Array data; \
 } x##_Hashmap; \
 \
-x##_Hashmap x##_Hashmap_Create(); \
+x##_Hashmap x##_Hashmap_Create(void); \
 void x##_Hashmap_Free( x##_Hashmap* h); \
 size_t x##_Hashmap_Impl_AddEntry( x##_Hashmap* h, uint64_t key); \
 void x##_Hashmap_Impl_Erase( x##_Hashmap* h, FindResult* fr); \
@@ -234,7 +234,7 @@ x##_Hashmap_Entry* x##_Hashmap_Multi_FindNext( x##_Hashmap* h, x##_Hashmap_Entry
 void x##_Hashmap_Multi_Remove( x##_Hashmap* h, x##_Hashmap_Entry* e); \
 void x##_Hashmap_Multi_RemoveAll(x##_Hashmap* h, uint64_t key); \
 \
-inline x##_Hashmap x##_Hashmap_Create() \
+inline x##_Hashmap x##_Hashmap_Create(void) \
 { \
     x##_Hashmap hashmap; \
     hashmap.hashes = size_t_Array_Create(); \
