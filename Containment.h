@@ -30,7 +30,7 @@
 #define CONTAINMENT_CAPACITY_RULE_POST + 2
 #endif
 
-#define CONTAINMENT_END_OF_LIST (size_t)(-1)
+#define CONTAINMENT_END_OF_LIST ((size_t)(-1))
 
 typedef struct
 {
